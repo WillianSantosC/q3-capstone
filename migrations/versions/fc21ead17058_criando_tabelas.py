@@ -57,7 +57,7 @@ def upgrade():
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('name', sa.String(length=64), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
-    sa.Column('password_hash', sa.String(length=64), nullable=False),
+    sa.Column('password_hash', sa.String, nullable=False),
     sa.Column('image_id', postgresql.UUID(), nullable=True),
     sa.Column('activity_id', postgresql.UUID(), nullable=True),
     sa.ForeignKeyConstraint(['activity_id'], ['activities.id'], ),
