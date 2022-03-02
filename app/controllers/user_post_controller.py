@@ -31,4 +31,3 @@ def post_user():
     except EmailError as error:
         return error.message, error.code
 
-
