@@ -15,6 +15,6 @@ def login():
     if not user.check_password(data['password']):
         return {"error": "email and password missmatch"},  HTTPStatus.UNAUTHORIZED
 
-    token = create_access_token(user, expires_delta=timedelta(minutes=2))
+    token = create_access_token(user, expires_delta=timedelta(minutes=30))
 
     return {"access_token": token}, HTTPStatus.OK

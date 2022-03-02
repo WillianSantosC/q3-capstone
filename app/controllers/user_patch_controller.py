@@ -8,17 +8,19 @@ from app.models.user_model import UserModel
 def update_user():
     data = request.get_json()
     session = current_app.db.session
-    user: UserModel = get_jwt_identity()
+    user_identity = get_jwt_identity()
+    user: UserModel = UserModel.query.filter_by(email=user_identity['email']).first()
+    print(user)
 
     for key, value in data.items():
         if key == 'email':
-            UserModel.validate_email(value)
+            user.validate_email(key, value)
+            setattr(user, key, value)
+        if key == 'name':
             setattr(user, key, value)
         if key == 'password':
-            hashed = UserModel.password(value)
-            setattr(user, key, hashed)
-        else:
-            setattr(user, key, value)
+            password_to_hash = data["password"]
+            user.password = password_to_hash
 
     session.add(user)
     session.commit()
