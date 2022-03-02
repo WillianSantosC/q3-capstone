@@ -42,7 +42,6 @@ class UserModel(db.Model):
         
         email = re.fullmatch(regex, value)
         
-        print(value)
         if not email:
             raise EmailError
 
