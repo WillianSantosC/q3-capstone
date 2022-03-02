@@ -4,6 +4,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 @jwt_required()
-def main_get():
+def user_get():
     user = get_jwt_identity()
     return jsonify(user), HTTPStatus.OK
