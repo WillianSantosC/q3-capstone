@@ -37,12 +37,12 @@ class UserModel(db.Model):
         return check_password_hash(self.password_hash, password_to_compare)
 
     @validates('email')
-    def validate_email(self, _, value):
+    def validate_email(self, key, value):
         regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+([.]\w{2,3}){1,2}$'
-
+        
         email = re.fullmatch(regex, value)
-
+        
         if not email:
-            raise EmailError()
+            raise EmailError
 
         return value
