@@ -21,7 +21,7 @@ class UserModel(db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String(64), nullable=False)
     email = Column(String(255), nullable=False, unique=True)
-    password_hash = Column(String(64), nullable=False)
+    password_hash = Column(String, nullable=False)
     image_id = Column(UUID, ForeignKey('images.id'))
     activity_id = Column(UUID, ForeignKey('activities.id'))
 
@@ -37,12 +37,13 @@ class UserModel(db.Model):
         return check_password_hash(self.password_hash, password_to_compare)
 
     @validates('email')
-    def validate_email(self, _, value):
-        regex = '(?:[a-z0-9!#$%&"*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&"*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])'
-
+    def validate_email(self, key, value):
+        regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+([.]\w{2,3}){1,2}$'
+        
         email = re.fullmatch(regex, value)
-
+        
+        print(value)
         if not email:
-            raise EmailError()
+            raise EmailError
 
         return value
