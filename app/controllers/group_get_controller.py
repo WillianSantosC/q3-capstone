@@ -4,11 +4,12 @@ from http import HTTPStatus
 from flask import current_app, jsonify
 from sqlalchemy.orm import Session
 from flask_jwt_extended import jwt_required
-
-from app.models.user_model import UserModel
+import sqlalchemy
 
 @jwt_required()
 def group_get():
-    session: Session = current_app.db.session
-    groups = GroupModel.query.all()
-    return jsonify(groups),HTTPStatus.OK
+    try:
+        groups = GroupModel.query.all()
+        return jsonify(groups),HTTPStatus.OK
+    except sqlalchemy.exc.ProgrammingError:
+        return jsonify({"message": "Ainda não existem grupos cadastrados"}),HTTPStatus.OK
