@@ -34,17 +34,16 @@ def post_user():
 
 
 @jwt_required()
-def add_in_group():
+def add_in_group(group_id: int):
     session: Session = current_app.db.session
     user_query: Query = UserModel.query
     group_query: Query = GroupModel.query
-    data: dict = request.get_json()
 
     email = get_jwt_identity().get('email')
 
     user: UserModel = user_query.filter_by(email=email).first()
 
-    group: GroupModel = group_query.filter_by(title=data.get('title')).first()
+    group: GroupModel = group_query.get(group_id)
 
     user.groups.append(group)
 
