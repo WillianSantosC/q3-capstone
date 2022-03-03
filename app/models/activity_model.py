@@ -13,6 +13,7 @@ class ActivityModel(db.Model):
     card_id: str
     timer_total: str
     timer_init: str
+    favorite: bool
     category_id: str
 
     __tablename__ = "activities"
