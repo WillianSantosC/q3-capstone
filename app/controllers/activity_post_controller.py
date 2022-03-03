@@ -49,10 +49,12 @@ def activity_post_play(id):
     if activity.timer_init == None:
         activity.timer_init = now
 
-    session.add(activity)
-    session.commit()
+        session.add(activity)
+        session.commit()
 
-    return jsonify(activity), HTTPStatus.OK
+        return jsonify(activity), HTTPStatus.OK
+    else:
+        return {"msg": "this time has already started"}, HTTPStatus.CONFLICT
 
 
 @jwt_required()
@@ -83,7 +85,9 @@ def activity_post_pause(id):
 
             activity.timer_init = None
 
-    session.add(activity)
-    session.commit()
+        session.add(activity)
+        session.commit()
 
-    return jsonify(activity), HTTPStatus.OK
+        return jsonify(activity), HTTPStatus.OK
+    else:
+        return {"msg": "this time has already been paused"}, HTTPStatus.CONFLICT
