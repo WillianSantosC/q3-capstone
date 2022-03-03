@@ -1,11 +1,14 @@
-from http import HTTPStatus
-from flask import current_app, request, jsonify
-from app.models.category_model import CategoryModel
-from app.models.activity_model import ActivityModel
-from sqlalchemy.orm import Session
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
+from http import HTTPStatus
+
+from flask import current_app, jsonify, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from sqlalchemy.orm import Session
+
+from app.models.activity_model import ActivityModel
+from app.models.category_model import CategoryModel
 from app.models.user_model import UserModel
+from app.services.sum_time import sum_time
 
 
 @jwt_required()
@@ -13,9 +16,9 @@ def activity_post():
     session: Session = current_app.db.session
 
     data = request.get_json()
-    name = data["name"]
+    name = data['name']
 
-    email = get_jwt_identity().get("email")
+    email = get_jwt_identity().get('email')
 
     user: UserModel = UserModel.query.filter_by(email=email).first()
 
@@ -41,24 +44,29 @@ def activity_post():
 def activity_post_time(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
-    format_year = "%Y-%m-%d %H:%M:%S"
+    format_year = '%Y-%m-%d %H:%M:%S'
     now = datetime.utcnow().strftime(format_year)
-    if activity.timer_init == "null":
+    if activity.timer_init == 'null':
         activity.timer_init = now
 
-    try:
-        more_time = datetime.strptime(now, format_year) - datetime.strptime(
-            activity.timer_init, format_year
-        )
-        activity.timer_total = more_time + datetime.strptime(
-            activity.timer_total, format_year
-        )
-        activity.timer_init = "null"
+    else:
+        if activity.timer_total != 'null':
+            more_time = datetime.strptime(
+                now, format_year
+            ) - datetime.strptime(activity.timer_init, format_year)
 
-    except:
-        activity.timer_total = datetime.strptime(now, format_year) - datetime.strptime(
-            activity.timer_init, format_year
-        )
+            activity.timer_total = sum_time(
+                activity.timer_total,
+                more_time,
+            )
+
+            activity.timer_init = 'null'
+
+        else:
+            new_time = datetime.strptime(now, format_year) - datetime.strptime(
+                activity.timer_init, format_year
+            )
+            activity.timer_total = new_time
 
     session.add(activity)
     session.commit()
