@@ -4,6 +4,7 @@ from http import HTTPStatus
 from flask import current_app, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 from app.models.activity_model import ActivityModel
 from app.models.category_model import CategoryModel
@@ -43,6 +44,19 @@ def activity_post():
 def activity_post_time(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
+    format_year = "%Y-%m-%d %H:%M:%S"
+    now = datetime.utcnow().strftime(format_year)
+    if activity.timer_init == "null":
+        activity.timer_init = now
+
+    try:
+        more_time = datetime.strptime(now, format_year) - datetime.strptime(
+            activity.timer_init, format_year
+        )
+        activity.timer_total = more_time + datetime.strptime(
+            activity.timer_total, format_year
+        )
+        activity.timer_init = "null"
 
     if activity.timer_init == 'null':
         activity.timer_init = datetime.datetime.now()
@@ -56,6 +70,11 @@ def activity_post_time(id):
         )
 
         activity.timer_init = 'null'
+
+    except:
+        activity.timer_total = datetime.strptime(now, format_year) - datetime.strptime(
+            activity.timer_init, format_year
+        )
 
     session.add(activity)
     session.commit()
