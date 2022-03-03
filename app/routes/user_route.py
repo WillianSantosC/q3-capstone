@@ -13,5 +13,3 @@ bp.post("/register")(post_user)
 bp.post("/login")(login)
 bp.patch('')(update_user)
 bp.delete("")(user_delete)
-
-
