@@ -52,5 +52,5 @@ def add_in_group():
 
     return (
         jsonify(msg=f'User registered to group `{group.title}`'),
-        HTTPStatus.OK,
+        HTTPStatus.OK, 
     )
