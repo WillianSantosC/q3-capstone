@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from flask import current_app, jsonify, request
+from flask import Flask, current_app, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Query, Session
@@ -52,5 +52,5 @@ def add_in_group():
 
     return (
         jsonify(msg=f'User registered to group `{group.title}`'),
-        HTTPStatus.OK, 
+        HTTPStatus.OK,
     )
