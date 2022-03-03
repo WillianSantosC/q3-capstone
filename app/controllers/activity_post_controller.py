@@ -4,7 +4,7 @@ from app.models.category_model import CategoryModel
 from app.models.activity_model import ActivityModel
 from sqlalchemy.orm import Session
 from flask_jwt_extended import jwt_required, get_jwt_identity
-import datetime
+from datetime import datetime
 from app.models.user_model import UserModel
 
 
@@ -41,17 +41,23 @@ def activity_post():
 def activity_post_time(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
-
+    now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
     if activity.timer_init == "null":
-        activity.timer_init = datetime.datetime.now()
+        activity.timer_init = now
 
-    else:
-        activity.timer_total = (
-            datetime.datetime.strptime(activity.timer_init, "%Y-%m-%d %H:%M:%S.%f")
-            - datetime.datetime.now()
+    try:
+        more_time = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") - datetime.strptime(
+            activity.timer_init, "%Y-%m-%d %H:%M:%S"
         )
-
+        activity.timer_total = more_time + datetime.strptime(
+            activity.timer_total, "%Y-%m-%d %H:%M:%S"
+        )
         activity.timer_init = "null"
+
+    except:
+        activity.timer_total = datetime.strptime(
+            now, "%Y-%m-%d %H:%M:%S"
+        ) - datetime.strptime(activity.timer_init, "%Y-%m-%d %H:%M:%S")
 
     session.add(activity)
     session.commit()
