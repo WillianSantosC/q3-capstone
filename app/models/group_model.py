@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import uuid4
 
-from sqlalchemy import Boolean, Column, String
+from sqlalchemy import Boolean, Column, String, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -20,5 +20,6 @@ class GroupModel(db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     title = Column(String(64), nullable=False, unique=True)
     privacy = Column(Boolean, default=False)
+    owner_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
 
     users = relationship('UserModel', secondary=users_groups, backref='groups')
