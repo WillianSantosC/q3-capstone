@@ -20,6 +20,8 @@ def create_group():
 
     new_group: GroupModel = GroupModel(title=data.get('title'))
 
+    new_group.owner_id = user.id
+
     user.groups.append(new_group)
 
     session.add(new_group)
