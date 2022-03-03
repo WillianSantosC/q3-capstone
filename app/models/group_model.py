@@ -11,7 +11,6 @@ from app.models.users_groups_table import users_groups
 
 @dataclass
 class GroupModel(db.Model):
-    id: int
     title: str
     privacy: bool
 
