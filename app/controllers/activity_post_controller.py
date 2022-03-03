@@ -16,9 +16,9 @@ def activity_post():
     session: Session = current_app.db.session
 
     data = request.get_json()
-    name = data['name']
+    name = data["name"]
 
-    email = get_jwt_identity().get('email')
+    email = get_jwt_identity().get("email")
 
     user: UserModel = UserModel.query.filter_by(email=email).first()
 
@@ -44,23 +44,23 @@ def activity_post():
 def activity_post_time(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
-    format_year = '%Y-%m-%d %H:%M:%S'
-    now = datetime.utcnow().strftime(format_year)
-    if activity.timer_init == 'null':
+    format_year = "%Y-%m-%d %H:%M:%S"
+    now = datetime.now().strftime(format_year)
+    if activity.timer_init == "null":
         activity.timer_init = now
 
     else:
-        if activity.timer_total != 'null':
-            more_time = datetime.strptime(
-                now, format_year
-            ) - datetime.strptime(activity.timer_init, format_year)
+        if activity.timer_total != "null":
+            more_time = datetime.strptime(now, format_year) - datetime.strptime(
+                activity.timer_init, format_year
+            )
 
             activity.timer_total = sum_time(
                 activity.timer_total,
                 more_time,
             )
 
-            activity.timer_init = 'null'
+            activity.timer_init = "null"
 
         else:
             new_time = datetime.strptime(now, format_year) - datetime.strptime(
