@@ -16,9 +16,9 @@ def activity_post():
     session: Session = current_app.db.session
 
     data = request.get_json()
-    name = data["name"]
+    name = data['name']
 
-    email = get_jwt_identity().get("email")
+    email = get_jwt_identity().get('email')
 
     user: UserModel = UserModel.query.filter_by(email=email).first()
 
@@ -44,7 +44,7 @@ def activity_post():
 def activity_post_play(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
-    format_year = "%Y-%m-%d %H:%M:%S"
+    format_year = '%Y-%m-%d %H:%M:%S'
     now = datetime.now().strftime(format_year)
     if activity.timer_init == None:
         activity.timer_init = now
@@ -54,21 +54,21 @@ def activity_post_play(id):
 
         return jsonify(activity), HTTPStatus.OK
     else:
-        return {"msg": "this time has already started"}, HTTPStatus.CONFLICT
+        return {'msg': 'this time has already started'}, HTTPStatus.CONFLICT
 
 
 @jwt_required()
 def activity_post_pause(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
-    format_year = "%Y-%m-%d %H:%M:%S"
+    format_year = '%Y-%m-%d %H:%M:%S'
     now = datetime.now().strftime(format_year)
     if activity.timer_init != None:
 
         if activity.timer_total != None:
-            more_time = datetime.strptime(now, format_year) - datetime.strptime(
-                activity.timer_init, format_year
-            )
+            more_time = datetime.strptime(
+                now, format_year
+            ) - datetime.strptime(activity.timer_init, format_year)
             print(more_time, activity.timer_total)
             activity.timer_total = sum_time(
                 activity.timer_total,
@@ -90,4 +90,6 @@ def activity_post_pause(id):
 
         return jsonify(activity), HTTPStatus.OK
     else:
-        return {"msg": "this time has already been paused"}, HTTPStatus.CONFLICT
+        return {
+            'msg': 'this time has already been paused'
+        }, HTTPStatus.CONFLICT
