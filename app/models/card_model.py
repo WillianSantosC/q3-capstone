@@ -13,7 +13,7 @@ class CardModel(db.Model):
     tile: str
     description: str
 
-    __tablename__ = "cards"
+    __tablename__ = 'cards'
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     tile = Column(String(64), nullable=False)
