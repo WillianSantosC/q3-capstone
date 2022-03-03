@@ -41,23 +41,24 @@ def activity_post():
 def activity_post_time(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
-    now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    format_year = "%Y-%m-%d %H:%M:%S"
+    now = datetime.utcnow().strftime(format_year)
     if activity.timer_init == "null":
         activity.timer_init = now
 
     try:
-        more_time = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") - datetime.strptime(
-            activity.timer_init, "%Y-%m-%d %H:%M:%S"
+        more_time = datetime.strptime(now, format_year) - datetime.strptime(
+            activity.timer_init, format_year
         )
         activity.timer_total = more_time + datetime.strptime(
-            activity.timer_total, "%Y-%m-%d %H:%M:%S"
+            activity.timer_total, format_year
         )
         activity.timer_init = "null"
 
     except:
-        activity.timer_total = datetime.strptime(
-            now, "%Y-%m-%d %H:%M:%S"
-        ) - datetime.strptime(activity.timer_init, "%Y-%m-%d %H:%M:%S")
+        activity.timer_total = datetime.strptime(now, format_year) - datetime.strptime(
+            activity.timer_init, format_year
+        )
 
     session.add(activity)
     session.commit()
