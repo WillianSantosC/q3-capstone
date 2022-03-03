@@ -1,10 +1,12 @@
-from http import HTTPStatus
-from flask import current_app, request, jsonify
-from app.models.category_model import CategoryModel
-from app.models.activity_model import ActivityModel
-from sqlalchemy.orm import Session
-from flask_jwt_extended import jwt_required, get_jwt_identity
 import datetime
+from http import HTTPStatus
+
+from flask import current_app, jsonify, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from sqlalchemy.orm import Session
+
+from app.models.activity_model import ActivityModel
+from app.models.category_model import CategoryModel
 from app.models.user_model import UserModel
 
 
@@ -13,9 +15,9 @@ def activity_post():
     session: Session = current_app.db.session
 
     data = request.get_json()
-    name = data["name"]
+    name = data['name']
 
-    email = get_jwt_identity().get("email")
+    email = get_jwt_identity().get('email')
 
     user: UserModel = UserModel.query.filter_by(email=email).first()
 
@@ -42,16 +44,18 @@ def activity_post_time(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
 
-    if activity.timer_init == "null":
+    if activity.timer_init == 'null':
         activity.timer_init = datetime.datetime.now()
 
     else:
         activity.timer_total = (
-            datetime.datetime.strptime(activity.timer_init, "%Y-%m-%d %H:%M:%S.%f")
+            datetime.datetime.strptime(
+                activity.timer_init, '%Y-%m-%d %H:%M:%S.%f'
+            )
             - datetime.datetime.now()
         )
 
-        activity.timer_init = "null"
+        activity.timer_init = 'null'
 
     session.add(activity)
     session.commit()
