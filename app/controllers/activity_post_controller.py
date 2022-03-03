@@ -41,26 +41,41 @@ def activity_post():
 
 
 @jwt_required()
-def activity_post_time(id):
+def activity_post_play(id):
     session: Session = current_app.db.session
     activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
     format_year = "%Y-%m-%d %H:%M:%S"
     now = datetime.now().strftime(format_year)
-    if activity.timer_init == "null":
+    if activity.timer_init == None:
         activity.timer_init = now
 
+        session.add(activity)
+        session.commit()
+
+        return jsonify(activity), HTTPStatus.OK
     else:
-        if activity.timer_total != "null":
+        return {"msg": "this time has already started"}, HTTPStatus.CONFLICT
+
+
+@jwt_required()
+def activity_post_pause(id):
+    session: Session = current_app.db.session
+    activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
+    format_year = "%Y-%m-%d %H:%M:%S"
+    now = datetime.now().strftime(format_year)
+    if activity.timer_init != None:
+
+        if activity.timer_total != None:
             more_time = datetime.strptime(now, format_year) - datetime.strptime(
                 activity.timer_init, format_year
             )
-
+            print(more_time, activity.timer_total)
             activity.timer_total = sum_time(
                 activity.timer_total,
                 more_time,
             )
 
-            activity.timer_init = "null"
+            activity.timer_init = None
 
         else:
             new_time = datetime.strptime(now, format_year) - datetime.strptime(
@@ -68,7 +83,11 @@ def activity_post_time(id):
             )
             activity.timer_total = new_time
 
-    session.add(activity)
-    session.commit()
+            activity.timer_init = None
 
-    return jsonify(activity), HTTPStatus.OK
+        session.add(activity)
+        session.commit()
+
+        return jsonify(activity), HTTPStatus.OK
+    else:
+        return {"msg": "this time has already been paused"}, HTTPStatus.CONFLICT
