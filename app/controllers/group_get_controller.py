@@ -2,7 +2,6 @@ from app.models.group_model import GroupModel
 from http import HTTPStatus
 
 from flask import current_app, jsonify
-from sqlalchemy.orm import Session
 from flask_jwt_extended import jwt_required
 import sqlalchemy
 
