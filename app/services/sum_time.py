@@ -2,8 +2,8 @@ from datetime import timedelta
 
 
 def sum_time(total, more):
-    total = str(total).split(":")
-    more = str(more).split(":")
+    total = str(total).split(':')
+    more = str(more).split(':')
     new_total = timedelta(
         seconds=int(total[2]),
         minutes=int(total[1]),

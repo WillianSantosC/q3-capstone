@@ -12,4 +12,4 @@ def activity_get(id):
     if activity != None:
         return jsonify(activity), HTTPStatus.OK
     else:
-        return {"msg": "activity not found"}, HTTPStatus.NOT_FOUND
+        return {'msg': 'activity not found'}, HTTPStatus.NOT_FOUND
