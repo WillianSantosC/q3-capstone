@@ -18,7 +18,6 @@ class CardModel(db.Model):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     title = Column(String(64), nullable=False)
     description = Column(Text, nullable=False)
-
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     activity_id = Column(UUID(as_uuid=True), ForeignKey('activities.id'))
 
