@@ -9,6 +9,7 @@ from app.models.activity_model import ActivityModel
 from app.models.category_model import CategoryModel
 from app.models.user_model import UserModel
 from app.services.sum_time import sum_time
+from sqlalchemy.exc import DataError
 
 
 @jwt_required()
@@ -16,9 +17,9 @@ def activity_post():
     session: Session = current_app.db.session
 
     data = request.get_json()
-    name = data['name']
+    name = data["name"].title()
 
-    email = get_jwt_identity().get('email')
+    email = get_jwt_identity().get("email")
 
     user: UserModel = UserModel.query.filter_by(email=email).first()
 
@@ -42,54 +43,61 @@ def activity_post():
 
 @jwt_required()
 def activity_post_play(id):
-    session: Session = current_app.db.session
-    activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
-    format_year = '%Y-%m-%d %H:%M:%S'
-    now = datetime.now().strftime(format_year)
-    if activity.timer_init == None:
-        activity.timer_init = now
+    try:
+        session: Session = current_app.db.session
+        activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
+        format_year = "%Y-%m-%d %H:%M:%S"
+        now = datetime.now().strftime(format_year)
+        if activity.timer_init == None:
+            activity.timer_init = now
 
-        session.add(activity)
-        session.commit()
+            session.add(activity)
+            session.commit()
 
-        return jsonify(activity), HTTPStatus.OK
-    else:
-        return {'msg': 'this time has already started'}, HTTPStatus.CONFLICT
+            return {
+                "timer_init": activity.timer_init,
+                "timer_total": activity.timer_total,
+            }, HTTPStatus.OK
+        else:
+            return {"msg": "this time has already started"}, HTTPStatus.CONFLICT
+    except DataError:
+        return {"msg": "activity not found"}, HTTPStatus.BAD_REQUEST
 
 
 @jwt_required()
 def activity_post_pause(id):
-    session: Session = current_app.db.session
-    activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
-    format_year = '%Y-%m-%d %H:%M:%S'
-    now = datetime.now().strftime(format_year)
-    if activity.timer_init != None:
+    try:
+        session: Session = current_app.db.session
+        activity: ActivityModel = ActivityModel().query.filter_by(id=id).first()
+        format_year = "%Y-%m-%d %H:%M:%S"
+        now = datetime.now().strftime(format_year)
+        if activity.timer_init != None:
 
-        if activity.timer_total != None:
-            more_time = datetime.strptime(
-                now, format_year
-            ) - datetime.strptime(activity.timer_init, format_year)
-            print(more_time, activity.timer_total)
-            activity.timer_total = sum_time(
-                activity.timer_total,
-                more_time,
-            )
+            if activity.timer_total != None:
+                more_time = datetime.strptime(now, format_year) - datetime.strptime(
+                    activity.timer_init, format_year
+                )
+                print(more_time, activity.timer_total)
+                activity.timer_total = sum_time(
+                    activity.timer_total,
+                    more_time,
+                )
 
-            activity.timer_init = None
+                activity.timer_init = None
 
+            else:
+                new_time = datetime.strptime(now, format_year) - datetime.strptime(
+                    activity.timer_init, format_year
+                )
+                activity.timer_total = new_time
+
+                activity.timer_init = None
+
+            session.add(activity)
+            session.commit()
+
+            return {"timer_total": activity.timer_total}, HTTPStatus.OK
         else:
-            new_time = datetime.strptime(now, format_year) - datetime.strptime(
-                activity.timer_init, format_year
-            )
-            activity.timer_total = new_time
-
-            activity.timer_init = None
-
-        session.add(activity)
-        session.commit()
-
-        return jsonify(activity), HTTPStatus.OK
-    else:
-        return {
-            'msg': 'this time has already been paused'
-        }, HTTPStatus.CONFLICT
+            return {"msg": "this time has already been paused"}, HTTPStatus.CONFLICT
+    except DataError:
+        return {"msg": "activity not found"}, HTTPStatus.BAD_REQUEST

@@ -16,17 +16,19 @@ class UserModel(db.Model):
     name: str
     email: str
 
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String(64), nullable=False)
     email = Column(String(255), nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
-    image_id = Column(UUID(as_uuid=True), ForeignKey('images.id'))
+    image_id = Column(UUID(as_uuid=True), ForeignKey("images.id"))
+
+    activity: list = db.relationship("ActivityModel", backref="users")
 
     @property
     def password(self):
-        raise AttributeError('Password is not accessible')
+        raise AttributeError("Password is not accessible")
 
     @password.setter
     def password(self, password_to_hash):
@@ -35,9 +37,9 @@ class UserModel(db.Model):
     def check_password(self, password_to_compare):
         return check_password_hash(self.password_hash, password_to_compare)
 
-    @validates('email')
+    @validates("email")
     def validate_email(self, key, value):
-        regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+([.]\w{2,3}){1,2}$'
+        regex = r"^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+([.]\w{2,3}){1,2}$"
 
         email = re.fullmatch(regex, value)
 
