@@ -20,4 +20,4 @@ def activity_patch(id):
         session.commit()
         return '', HTTPStatus.OK
     except:
-        return {'msg': 'activity not found'}, HTTPStatus.OK
+        return {'msg': 'activity not found'}, HTTPStatus.NOT_FOUND
