@@ -14,7 +14,6 @@ class ActivityModel(db.Model):
     timer_total: str
     timer_init: str
     favorite: bool
-    category_id: str
 
     __tablename__ = "activities"
 
@@ -27,4 +26,5 @@ class ActivityModel(db.Model):
 
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
 
+    category: list = db.relationship("CategoryModel", backref="activities")
     card: list = db.relationship("CardModel", backref="activities")
