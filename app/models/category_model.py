@@ -9,10 +9,9 @@ from app.configs.database import db
 
 @dataclass
 class CategoryModel(db.Model):
-    id: int
     name: str
 
-    __tablename__ = 'categories'
+    __tablename__ = "categories"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column(String(64), nullable=False, unique=True)
