@@ -1,12 +1,14 @@
 from http import HTTPStatus
 from sqlite3 import DataError
+
 from flask import current_app, jsonify
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-from app.models.user_model import UserModel
-from app.models.comment_model import CommentModel
-from sqlalchemy.orm import Query, Session
 from sqlalchemy.exc import DataError
+from sqlalchemy.orm import Query, Session
+
+from app.models.comment_model import CommentModel
+from app.models.user_model import UserModel
+
 
 @jwt_required()
 def delete_comment(group_id, comment_id):

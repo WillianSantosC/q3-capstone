@@ -1,11 +1,13 @@
 from http import HTTPStatus
 from sqlite3 import DataError, IntegrityError
-from flask import current_app, request, jsonify
-from flask_jwt_extended import get_jwt_identity, jwt_required
 
-from app.models.user_model import UserModel
-from app.models.comment_model import CommentModel
+from flask import current_app, jsonify, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.orm import Query, Session
+
+from app.models.comment_model import CommentModel
+from app.models.user_model import UserModel
+
 
 @jwt_required()
 def update_comment(group_id, comment_id):
@@ -27,7 +29,7 @@ def update_comment(group_id, comment_id):
                     setattr(comment, key, value)
         else:
             return jsonify(error='Permission denied'), HTTPStatus.FORBIDDEN
-    
+
         session.commit()
 
         return jsonify(comment), HTTPStatus.OK
