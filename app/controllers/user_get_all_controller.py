@@ -15,6 +15,10 @@ def user_get_all():
         for time in user.activity:
             timer_general = sum_time(timer_general, time.timer_total)
 
-        new_users.append({"name": user.name, "timer_general": str(timer_general)})
+        new_users.append(
+            {'name': user.name, 'timer_general': str(timer_general)}
+        )
 
-    return jsonify(sorted(new_users, key=lambda x: x["timer_general"], reverse=True))
+    return jsonify(
+        sorted(new_users, key=lambda x: x['timer_general'], reverse=True)
+    )

@@ -6,13 +6,14 @@ from sqlalchemy.orm import Session
 
 from app.models.card_model import CardModel
 
+
 @jwt_required()
 def update_card(id):
     session: Session = current_app.db.session
     data = request.get_json()
 
     try:
-        card: CardModel = (CardModel().query.filter_by(id=id).first())
+        card: CardModel = CardModel().query.filter_by(id=id).first()
         card.title = data['title']
         card.description = data['description']
 
@@ -20,4 +21,4 @@ def update_card(id):
         session.commit()
         return '', HTTPStatus.OK
     except:
-        return {"msg": "activity not found"}, HTTPStatus.NOT_FOUND
+        return {'msg': 'activity not found'}, HTTPStatus.NOT_FOUND
