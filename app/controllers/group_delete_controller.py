@@ -5,7 +5,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.exc import DataError
 from sqlalchemy.orm import Query, Session
 
-from app.models.group_model import GroupModel
+from app.models.group_model import GroupModel 
 from app.models.user_model import UserModel
 
 
