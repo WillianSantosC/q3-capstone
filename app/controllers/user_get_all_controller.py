@@ -9,9 +9,9 @@ from app.services.sum_time import sum_time
 def user_get_all():
     users: UserModel = UserModel().query.all()
     new_users = []
-    timer_general = '00:00:00'
 
     for user in users:
+        timer_general = "00:00:00"
         for time in user.activity:
             timer_general = sum_time(timer_general, time.timer_total)
 
