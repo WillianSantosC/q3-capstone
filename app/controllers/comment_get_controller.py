@@ -13,9 +13,11 @@ from app.models.comment_model import CommentModel
 def comment_get(group_id):
     session: Session = db.session
     base_query = session.query(CommentModel)
+
     try:
         comments = base_query.filter_by(group_id=group_id).all()
         return jsonify(comments), HTTPStatus.OK
+
     except sqlalchemy.exc.ProgrammingError:
         return (
             jsonify({'message': 'Ainda não existem grupos cadastrados'}),

@@ -83,7 +83,6 @@ def activity_post_pause(id):
                 more_time = datetime.strptime(
                     now, format_year
                 ) - datetime.strptime(activity.timer_init, format_year)
-                print(more_time, activity.timer_total)
                 activity.timer_total = sum_time(
                     activity.timer_total,
                     more_time,

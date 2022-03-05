@@ -20,5 +20,6 @@ def update_card(id):
         session.add(card)
         session.commit()
         return '', HTTPStatus.OK
+
     except:
         return {'msg': 'activity not found'}, HTTPStatus.NOT_FOUND

@@ -15,6 +15,7 @@ def update_user():
     user: UserModel = UserModel.query.filter_by(
         email=user_identity['email']
     ).first()
+
     try:
         for key, value in data.items():
             if key == 'email':
