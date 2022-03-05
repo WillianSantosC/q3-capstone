@@ -17,7 +17,7 @@ def activity_post():
     session: Session = current_app.db.session
 
     data = request.get_json()
-    name = data['name'].title()
+    name = data['name'].capitalize()
 
     email = get_jwt_identity().get('email')
 

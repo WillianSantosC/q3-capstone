@@ -15,10 +15,11 @@ def user_get():
     for act in user.activity:
         timer_general = sum_time(timer_general, act.timer_total)
 
-    return jsonify(
+    return (
         {
             'name': user.name,
             'timer_general': str(timer_general),
             'activity': user.activity,
-        }
+        },
+        HTTPStatus.OK,
     )

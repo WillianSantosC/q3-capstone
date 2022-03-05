@@ -20,4 +20,3 @@ class CardModel(db.Model):
     description = Column(Text, nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     activity_id = Column(UUID(as_uuid=True), ForeignKey('activities.id'))
-

@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 import sqlalchemy
-from flask import current_app, jsonify
+from flask import jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm.session import Session
 
