@@ -2,7 +2,7 @@ alembic==1.7.6
 appdirs==1.4.4
 black==21.7b0
 blue==0.8.0
-click==8.0.4
+click==8.0.4 
 flake8==4.0.1
 Flask==2.0.3
 Flask-JWT-Extended==4.3.1
