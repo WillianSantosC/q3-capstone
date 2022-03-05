@@ -5,6 +5,7 @@ from app.routes.card_route import bp as bp_card
 from app.routes.comment_route import bp as bp_comment
 from app.routes.group_route import bp as bp_group
 from app.routes.user_route import bp as bp_user
+from app.routes.image_route import bp as bp_image
 
 
 def init_app(app: Flask):
@@ -13,3 +14,4 @@ def init_app(app: Flask):
     app.register_blueprint(bp_group)
     app.register_blueprint(bp_comment)
     app.register_blueprint(bp_card)
+    app.register_blueprint(bp_image)
