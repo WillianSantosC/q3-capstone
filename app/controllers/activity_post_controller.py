@@ -31,6 +31,11 @@ def activity_post():
 
     category = CategoryModel.query.filter_by(name=name).first()
 
+    activies = ActivityModel.query.all()
+    for act in activies:
+        if act.category.name == name:
+            return {'msg': 'activity already exist'}, HTTPStatus.CONFLICT
+
     activity = ActivityModel()
     activity.category_id = category.id
     activity.user_id = user.id

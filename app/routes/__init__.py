@@ -4,8 +4,8 @@ from app.routes.activity_route import bp as bp_activity
 from app.routes.card_route import bp as bp_card
 from app.routes.comment_route import bp as bp_comment
 from app.routes.group_route import bp as bp_group
-from app.routes.user_route import bp as bp_user
 from app.routes.image_route import bp as bp_image
+from app.routes.user_route import bp as bp_user
 
 
 def init_app(app: Flask):

@@ -1,32 +1,40 @@
 from http import HTTPStatus
-from http.client import UNSUPPORTED_MEDIA_TYPE
-from xmlrpc.client import UNSUPPORTED_ENCODING
+
 from flask import Response, current_app, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from sqlalchemy.orm import Session
 
 from app.models.image_model import ImageModel
-from sqlalchemy.orm import Session
-from flask_jwt_extended import get_jwt_identity, jwt_required
-
-
 from app.models.user_model import UserModel
 
 
 @jwt_required()
 def post_image():
-    email = get_jwt_identity().get("email")
+    session: Session = current_app.db.session
+
+    email = get_jwt_identity().get('email')
 
     user: UserModel = UserModel.query.filter_by(email=email).first()
 
-    session: Session = current_app.db.session
+    user_image: ImageModel = ImageModel.query.filter_by(
+        user_id=user.id
+    ).first()
 
-    img: ImageModel = ImageModel.query.filter_by(user_id=user.id).first()
+    file = request.files['image']
+    mimetype = file.mimetype
 
-    if img:
-        session.delete(img)
+    if user_image:
+        session.delete(user_image)
         session.commit()
 
-    file = request.files["image"]
-    mimetype = file.mimetype
+    if not file:
+        return {'msg': 'no image uploaded!'}, HTTPStatus.BAD_REQUEST
+
+    if not mimetype.split('/')[1] in ['png', 'jpg', 'jpeg']:
+        return {'msg': 'incorrect format'}, HTTPStatus.BAD_REQUEST
+
+    if len(file.read()) / 1024 < 15:
+        return {'msg': 'image size too large'}, HTTPStatus.BAD_REQUEST
 
     image = ImageModel(
         name=file.name, image=file.read(), mimetype=mimetype, user_id=user.id
@@ -34,13 +42,16 @@ def post_image():
 
     session.add(image)
     session.commit()
-    return {"id": image.id}, HTTPStatus.OK
+
+    return {'id': image.id}, HTTPStatus.OK
 
 
 def get_image(id):
     image = ImageModel.query.filter_by(id=id).first()
+
     if not image:
-        return {"msg": "not found"}, HTTPStatus.NOT_FOUND
+        return {'msg': 'not found'}, HTTPStatus.NOT_FOUND
+
     return Response(image.image, mimetype=image.mimetype), HTTPStatus.OK
 
 
@@ -48,8 +59,9 @@ def get_image(id):
 def delete_image(id):
     session: Session = current_app.db.session
 
-    img: ImageModel = ImageModel.query.filter_by(id=id).first()
+    image: ImageModel = ImageModel.query.filter_by(id=id).first()
 
-    session.delete(img)
+    session.delete(image)
     session.commit()
-    return "", HTTPStatus.OK
+
+    return '', HTTPStatus.OK

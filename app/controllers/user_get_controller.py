@@ -9,18 +9,18 @@ from app.services.sum_time import sum_time
 
 @jwt_required()
 def user_get():
-    email = get_jwt_identity().get("email")
+    email = get_jwt_identity().get('email')
     user: UserModel = UserModel().query.filter_by(email=email).first()
-    timer_general = "00:00:00"
+    timer_general = '00:00:00'
     for act in user.activity:
         timer_general = sum_time(timer_general, act.timer_total)
 
     return (
         {
-            "name": user.name,
-            "timer_general": str(timer_general),
-            "image": user.image,
-            "activity": user.activity,
+            'name': user.name,
+            'timer_general': str(timer_general),
+            'image': user.image,
+            'activity': user.activity,
         },
         HTTPStatus.OK,
     )
