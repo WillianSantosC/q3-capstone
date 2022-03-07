@@ -1,4 +1,3 @@
-from email.policy import HTTP
 from http import HTTPStatus
 
 from flask import current_app, jsonify, request
@@ -13,10 +12,9 @@ from app.models.user_model import UserModel
 def create_comment(group_id):
     session: Session = current_app.db.session
     user_query: Query = UserModel.query
-    comment_query: Query = CommentModel.query
 
     data: dict = request.get_json()
-    comment = data['comment']
+    comment = data['comment'].capitalize()
 
     email = get_jwt_identity().get('email')
     user: UserModel = user_query.filter_by(email=email).first()

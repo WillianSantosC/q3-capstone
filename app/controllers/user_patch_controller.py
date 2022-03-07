@@ -15,14 +15,14 @@ def update_user():
     user: UserModel = UserModel.query.filter_by(
         email=user_identity['email']
     ).first()
-    print(user)
+
     try:
         for key, value in data.items():
             if key == 'email':
                 user.validate_email(key, value)
                 setattr(user, key, value)
             if key == 'name':
-                setattr(user, key, value)
+                setattr(user, key, value.title())
             if key == 'password':
                 password_to_hash = data['password']
                 user.password = password_to_hash

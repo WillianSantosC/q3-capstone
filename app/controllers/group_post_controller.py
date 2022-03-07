@@ -14,7 +14,7 @@ def create_group():
     session: Session = current_app.db.session
     user_query: Query = UserModel.query
     data: dict = request.get_json()
-
+    data['title'] = data['title'].title()
     email = get_jwt_identity().get('email')
 
     user: UserModel = user_query.filter_by(email=email).first()

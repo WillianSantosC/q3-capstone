@@ -28,5 +28,6 @@ def delete_group(group_id: str):
             return '', HTTPStatus.NO_CONTENT
         else:
             return jsonify(error='Permission denied'), HTTPStatus.FORBIDDEN
+
     except DataError:
         return jsonify(error='Group not found'), HTTPStatus.NOT_FOUND

@@ -22,9 +22,9 @@ class UserModel(db.Model):
     name = Column(String(64), nullable=False)
     email = Column(String(255), nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
-    image_id = Column(UUID(as_uuid=True), ForeignKey('images.id'))
 
     activity: list = db.relationship('ActivityModel', backref='users')
+    image: list = db.relationship('ImageModel', backref='users')
 
     @property
     def password(self):

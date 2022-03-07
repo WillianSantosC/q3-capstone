@@ -26,12 +26,14 @@ def update_comment(group_id, comment_id):
         if comment.user_id == user.id:
             for key, value in data.items():
                 if key == 'comment':
-                    setattr(comment, key, value)
+                    setattr(comment, key, (value).capitalize())
+
         else:
             return jsonify(error='Permission denied'), HTTPStatus.FORBIDDEN
 
         session.commit()
 
         return jsonify(comment), HTTPStatus.OK
+
     except DataError:
         return jsonify(error='Comment not found'), HTTPStatus.NOT_FOUND

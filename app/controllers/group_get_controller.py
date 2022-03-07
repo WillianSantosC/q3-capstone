@@ -10,9 +10,11 @@ from app.models.group_model import GroupModel
 
 @jwt_required()
 def group_get():
+
     try:
         groups = GroupModel.query.all()
         return jsonify(groups), HTTPStatus.OK
+
     except sqlalchemy.exc.ProgrammingError:
         return (
             jsonify({'message': 'Ainda não existem grupos cadastrados'}),

@@ -17,7 +17,7 @@ def activity_post():
     session: Session = current_app.db.session
 
     data = request.get_json()
-    name = data['name'].title()
+    name = data['name'].capitalize()
 
     email = get_jwt_identity().get('email')
 
@@ -30,6 +30,11 @@ def activity_post():
         session.commit()
 
     category = CategoryModel.query.filter_by(name=name).first()
+
+    activies = ActivityModel.query.all()
+    for act in activies:
+        if act.category.name == name:
+            return {'msg': 'activity already exist'}, HTTPStatus.CONFLICT
 
     activity = ActivityModel()
     activity.category_id = category.id
@@ -83,7 +88,6 @@ def activity_post_pause(id):
                 more_time = datetime.strptime(
                     now, format_year
                 ) - datetime.strptime(activity.timer_init, format_year)
-                print(more_time, activity.timer_total)
                 activity.timer_total = sum_time(
                     activity.timer_total,
                     more_time,
