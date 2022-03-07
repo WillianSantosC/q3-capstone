@@ -16,7 +16,11 @@ def user_get_all():
             timer_general = sum_time(timer_general, time.timer_total)
 
         new_users.append(
-            {'name': user.name, 'timer_general': str(timer_general)}
+            {
+                'name': user.name,
+                'timer_general': str(timer_general),
+                'image': user.image,
+            }
         )
 
     return (
