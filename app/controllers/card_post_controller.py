@@ -5,6 +5,7 @@ from flask import current_app, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.orm import Query, Session
 
+from app.models.activity_model import ActivityModel
 from app.models.card_model import CardModel
 from app.models.user_model import UserModel
 

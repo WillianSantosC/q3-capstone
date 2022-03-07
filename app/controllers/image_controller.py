@@ -33,8 +33,8 @@ def post_image():
     if not mimetype.split('/')[1] in ['png', 'jpg', 'jpeg']:
         return {'msg': 'incorrect format'}, HTTPStatus.BAD_REQUEST
 
-    if len(file.read()) / 1024 < 15:
-        return {'msg': 'image size too large'}, HTTPStatus.BAD_REQUEST
+    # if len(file.read()) / 1024 < 15:
+    #     return {'msg': 'image size too large'}, HTTPStatus.BAD_REQUEST
 
     image = ImageModel(
         name=file.name, image=file.read(), mimetype=mimetype, user_id=user.id
