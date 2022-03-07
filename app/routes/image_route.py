@@ -1,10 +1,7 @@
 from flask import Blueprint
 
-from app.controllers.image_controller import (
-    delete_image,
-    get_image,
-    post_image,
-)
+from app.controllers.image_controller import (delete_image, get_image,
+                                              post_image)
 
 bp = Blueprint('bp_image', __name__, url_prefix='/api/image')
 

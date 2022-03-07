@@ -33,14 +33,16 @@ def post_image():
     if not mimetype.split('/')[1] in ['png', 'jpg', 'jpeg']:
         return {'msg': 'incorrect format'}, HTTPStatus.BAD_REQUEST
 
-    # if len(file.read()) / 1024 < 15:
-    #     return {'msg': 'image size too large'}, HTTPStatus.BAD_REQUEST
-
     image = ImageModel(
         name=file.name, image=file.read(), mimetype=mimetype, user_id=user.id
     )
 
     session.add(image)
+    session.commit()
+
+    image.url_image = (
+        f'https://note-time-api.herokuapp.com/api/image/{image.id}'
+    )
     session.commit()
 
     return {'id': image.id}, HTTPStatus.OK
