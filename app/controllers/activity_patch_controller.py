@@ -11,6 +11,7 @@ from app.models.activity_model import ActivityModel
 def activity_patch(id):
     session: Session = current_app.db.session
     data = request.get_json()
+
     try:
         activity: ActivityModel = (
             ActivityModel().query.filter_by(id=id).first()
@@ -19,5 +20,6 @@ def activity_patch(id):
         session.add(activity)
         session.commit()
         return '', HTTPStatus.OK
+
     except:
         return {'msg': 'activity not found'}, HTTPStatus.NOT_FOUND

@@ -15,6 +15,7 @@ def post_user():
 
     try:
         data = request.get_json()
+        data['name'] = data['name'].title()
         password_to_hash = data.pop('password')
         user = UserModel(**data)
         user.password = password_to_hash

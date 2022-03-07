@@ -14,11 +14,12 @@ def update_card(id):
 
     try:
         card: CardModel = CardModel().query.filter_by(id=id).first()
-        card.title = data['title']
-        card.description = data['description']
+        card.title = data['title'].capitalize()
+        card.description = data['description'].capitalize()
 
         session.add(card)
         session.commit()
         return '', HTTPStatus.OK
+
     except:
         return {'msg': 'activity not found'}, HTTPStatus.NOT_FOUND

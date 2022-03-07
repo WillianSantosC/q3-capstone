@@ -13,13 +13,11 @@ from app.models.user_model import UserModel
 @jwt_required()
 def create_card(activity_id):
     session: Session = current_app.db.session
-    activity_query: Query = ActivityModel.query
-    card_query: Query = CardModel.query
     user_query: Query = UserModel.query
 
     data: dict = request.get_json()
-    title = data['title']
-    description = data['description']
+    title = data['title'].capitalize()
+    description = data['description'].capitalize()
 
     email = get_jwt_identity().get('email')
     user: UserModel = user_query.filter_by(email=email).first()

@@ -33,8 +33,10 @@ def update_group(group_id: str):
         session.commit()
 
         return jsonify(group), HTTPStatus.OK
+
     except DataError:
         return jsonify(error='Group not found'), HTTPStatus.NOT_FOUND
+
     except IntegrityError as err:
         if '(psycopg2.errors.UniqueViolation)' in str(err):
             return (
