@@ -15,7 +15,7 @@ def delete_card(id):
         card: CardModel = CardModel().query.filter_by(id=id).first()
         session.delete(card)
         session.commit()
-        return '', HTTPStatus.OK
+        return '', HTTPStatus.NO_CONTENT
 
     except:
         return {'msg': 'card not found'}, HTTPStatus.NOT_FOUND

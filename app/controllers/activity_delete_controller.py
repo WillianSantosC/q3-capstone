@@ -15,7 +15,7 @@ def activity_delete(id):
         activity: ActivityModel = ActivityModel.query.filter_by(id=id).first()
         session.delete(activity)
         session.commit()
-        return '', HTTPStatus.OK
+        return '', HTTPStatus.NO_CONTENT
 
     except:
         return {'msg': 'activity not found'}, HTTPStatus.NOT_FOUND

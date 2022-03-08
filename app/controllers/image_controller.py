@@ -66,4 +66,4 @@ def delete_image(id):
     session.delete(image)
     session.commit()
 
-    return '', HTTPStatus.OK
+    return '', HTTPStatus.NO_CONTENT
