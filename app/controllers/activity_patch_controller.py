@@ -19,7 +19,7 @@ def activity_patch(id):
         activity.favorite = data['favorite']
         session.add(activity)
         session.commit()
-        return '', HTTPStatus.OK
+        return '', HTTPStatus.NO_CONTENT
 
     except:
         return {'msg': 'activity not found'}, HTTPStatus.NOT_FOUND
