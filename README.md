@@ -90,7 +90,7 @@ Requisição **bem sucedida** , sem retorno.
 
 ---
 
-## Delet
+## Delete
 
 <br />
 
@@ -98,11 +98,7 @@ Requisição **bem sucedida** , sem retorno.
 
 `DELETE/user`
 
-```json
-{
-  "email": "matheus1234@gmail.com"
-}
-```
+{}
 
 Requisição **bem sucedida** , sem retorno.
 
