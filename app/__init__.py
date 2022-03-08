@@ -5,10 +5,12 @@ from flask import Flask
 
 from app import routes
 from app.configs import database, jwt, migrations
+from flask_cors import CORS
 
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
