@@ -30,7 +30,7 @@ def update_user():
         session.add(user)
         session.commit()
 
-        return '', HTTPStatus.OK
+        return '', HTTPStatus.NO_CONTENT
 
     except IntegrityError as err:
         if '(psycopg2.errors.UniqueViolation)' in str(err):
